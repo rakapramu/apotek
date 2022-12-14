@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('obat_id')->references('id')->on('obat')->onDelete('cascade')->onDelete('cascade');
             $table->bigInteger('jumlah');
-            $table->bigInteger('total');
+            $table->bigInteger('total')->nullable();
             $table->timestamps();
         });
     }

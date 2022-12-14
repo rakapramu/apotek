@@ -160,7 +160,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($orders as $order)
+                                    @forelse ($orders as $order)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $order->obat->nama_obat }}</td>
@@ -168,7 +168,11 @@
                                             <td>{{ $order->jumlah }}</td>
                                             <td>Rp. {{ number_format($order->jumlah * $order->obat->harga) }}</td>
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center">Tidak Ada Transaksi</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
