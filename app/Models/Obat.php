@@ -15,4 +15,9 @@ class Obat extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    public function transaction()
+    {
+        return $this->hasMany(Obat::class);
+    }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,8 +26,12 @@ Route::prefix('admin')->middleware(['auth', 'isLogin'])->group(function () {
     Route::resource('obat', ObatController::class);
     Route::get('/', function () {
         return view('admin.index');
-    });
+    })->name('dashboard');
     Route::resource('order', OrderController::class);
+    Route::post('/save', [OrderController::class, 'save'])->name('save');
+
+    // transaction
+    Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction');
 });
 
 Auth::routes();

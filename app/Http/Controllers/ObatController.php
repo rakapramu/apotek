@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Obat;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ObatController extends Controller
 {
@@ -16,7 +17,7 @@ class ObatController extends Controller
     public function index()
     {
         $obats = Obat::all();
-        $orders = Order::all();
+        $orders = Order::with(['obat'])->where('users_id', Auth::user()->id)->get();
         return view('admin.obat.index', compact('obats', 'orders'));
     }
 

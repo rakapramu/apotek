@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('obat_id')->references('id')->on('obat')->onDelete('cascade')->onDelete('cascade');
-            $table->bigInteger('jumlah');
-            $table->bigInteger('total')->nullable();
+            $table->bigInteger('user_id');
+            $table->bigInteger('obat_id');
+            $table->bigInteger('total_price');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('transactions');
     }
 };

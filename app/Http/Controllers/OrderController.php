@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Obat;
 use App\Models\Order;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -35,8 +38,15 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        Order::create($data);
+        $data = Obat::where('id', $request->obat_id)->get();
+        $harga = $data[0]->harga;
+        Order::create([
+            'users_id' => Auth::user()->id,
+            'obat_id' => $request->obat_id,
+            'jumlah' => $request->jumlah,
+            'sub_total' => $harga * $request->jumlah
+        ]);
+
         return redirect()->route('obat.index');
     }
 
@@ -82,6 +92,29 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $item = Order::findOrFail($id);
+        $item->delete();
+        return redirect()->route('obat.index');
+    }
+
+    public function save(Request $request)
+    {
+        $data = $request->all();
+
+        // get carts data
+        $carts = Order::with(['obat'])->where('users_id', Auth::user()->id)->get();
+
+        // add to transactio data
+        $data['user_id'] = Auth::user()->id;
+        $data['obat_id'] = $carts[0]->obat_id;
+        $data['total_price'] = $carts->sum('sub_total');
+
+        // create transaction
+        $transaction = Transaction::create($data);
+
+        // delete after transaction
+        Order::where('users_id', Auth::user()->id)->delete();
+
+        return redirect()->route('obat.index');
     }
 }

@@ -142,6 +142,7 @@
                 </div>
             </div>
 
+            {{-- Order --}}
             <div class="col-lg-7 mb-4 order-0">
                 <div class="card">
                     <div class="card-header">
@@ -152,21 +153,27 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
                                         <th>Nama Obat</th>
                                         <th>Harga Satuan</th>
                                         <th>Jumlah</th>
-                                        <th>Total</th>
+                                        <th>Sub Total</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($orders as $order)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
                                             <td>{{ $order->obat->nama_obat }}</td>
                                             <td>{{ $order->obat->harga }}</td>
                                             <td>{{ $order->jumlah }}</td>
-                                            <td>Rp. {{ number_format($order->jumlah * $order->obat->harga) }}</td>
+                                            <td>{{ $order->sub_total }}</td>
+                                            <td>
+                                                <form action="{{ route('order.destroy', $order->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="text-blue">X</button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -175,7 +182,12 @@
                                     @endforelse
                                 </tbody>
                             </table>
+                            <h4>Total : Rp. {{ number_format($orders->sum('sub_total')) }}</h4>
                         </div>
+                        <form action="{{ route('save') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                        </form>
                     </div>
                 </div>
             </div>
