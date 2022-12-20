@@ -36,6 +36,8 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    //  tambah data ke order
     public function store(Request $request)
     {
         $data = Obat::where('id', $request->obat_id)->get();
@@ -90,6 +92,8 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    // hapus data order
     public function destroy($id)
     {
         $item = Order::findOrFail($id);
@@ -97,11 +101,12 @@ class OrderController extends Controller
         return redirect()->route('obat.index');
     }
 
+    // checkout
     public function save(Request $request)
     {
         $data = $request->all();
 
-        // get carts data
+        // get order data
         $carts = Order::with(['obat'])->where('users_id', Auth::user()->id)->get();
 
         // add to transactio data
@@ -112,7 +117,7 @@ class OrderController extends Controller
         // create transaction
         $transaction = Transaction::create($data);
 
-        // delete after transaction
+        // kemudian hapus data di tabel order
         Order::where('users_id', Auth::user()->id)->delete();
 
         return redirect()->route('obat.index');

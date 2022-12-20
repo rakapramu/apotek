@@ -27,7 +27,8 @@
                                                     @method('delete')
                                                     @csrf
                                                     <div class="btn-group">
-                                                        <a href="#" class="btn btn-warning btn-sm">
+                                                        <a href="{{ route('obat.edit', $obat->id) }}"
+                                                            class="btn btn-warning btn-sm">
                                                             <i class='bx bx-pencil'></i>
                                                         </a>
                                                         <button type="submit" class="btn btn-danger btn-sm"
@@ -49,6 +50,8 @@
                     </div>
                 </div>
             </div>
+
+            {{-- CRUD OBAT --}}
             <div class="col-lg-4 mb-4 order-0">
                 <div class="card">
                     <h5 class="card-header">Tambah Data Obat</h5>
@@ -78,6 +81,7 @@
                     </div>
                 </div>
             </div>
+            {{-- AKHIR CRUD OBAT --}}
         </div>
 
         {{-- tampil pesan --}}
@@ -115,26 +119,7 @@
                                 <label for="harga">Jumlah</label>
                                 <div class="invalid-feedback" data-sb-feedback="harga:required">Jumlah Harus Di isi</div>
                             </div>
-                            <div class="form-floating mb-3">
-                                <input class="form-control" name="harga" type="text" placeholder="Angka 1"
-                                    data-sb-validations="required" />
-                                <label for="harga">Harga</label>
-                                <div class="invalid-feedback" data-sb-feedback="harga:required">Harga Harus Di isi</div>
-                            </div>
-                            {{-- <div class="form-floating mb-3">
-                                <input class="form-control" name="bayar" type="text" placeholder="Angka 2"
-                                    data-sb-validations="required" />
-                                <label for="bayar">Bayar</label>
-                                <div class="invalid-feedback" data-sb-feedback="bayar:required">Angka 2 is required.</div>
-                            </div> --}}
-                            <div class="form-floating mb-3">
-                                <input class="form-control" name="hasil" type="text" placeholder=""
-                                    data-sb-validations="" value="" disabled />
-                                <label for="">Total</label>
-                            </div>
                             <div class="text-center">
-                                <button class="btn btn-primary btn-lg" value="tambah" name="btn"
-                                    onclick="hitung('tambah')" type="button">Hitung</button>
                                 <button type="submit" class="btn btn-primary">Tambah</button>
                             </div>
                         </form>
@@ -164,9 +149,9 @@
                                     @forelse ($orders as $order)
                                         <tr>
                                             <td>{{ $order->obat->nama_obat }}</td>
-                                            <td>{{ $order->obat->harga }}</td>
+                                            <td>Rp. {{ number_format($order->obat->harga) }}</td>
                                             <td>{{ $order->jumlah }}</td>
-                                            <td>{{ $order->sub_total }}</td>
+                                            <td>Rp. {{ number_format($order->sub_total) }}</td>
                                             <td>
                                                 <form action="{{ route('order.destroy', $order->id) }}" method="POST">
                                                     @csrf
@@ -182,6 +167,7 @@
                                     @endforelse
                                 </tbody>
                             </table>
+                            <br>
                             <h4>Total : Rp. {{ number_format($orders->sum('sub_total')) }}</h4>
                         </div>
                         <form action="{{ route('save') }}" method="POST">

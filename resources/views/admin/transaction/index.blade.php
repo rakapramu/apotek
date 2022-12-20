@@ -20,7 +20,7 @@
                                 <tr>
                                     <td>{{ $data->user->name }}</td>
                                     <td>{{ $data->obat->nama_obat }}</td>
-                                    <td>{{ $data->total_price }}</td>
+                                    <td>{{ number_format($data->total_price) }}</td>
                                 </tr>
                             @empty
                                 <tr>

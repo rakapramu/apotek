@@ -69,7 +69,8 @@ class ObatController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = Obat::findOrFail($id);
+        return view('admin.obat.edit', compact('data'));
     }
 
     /**
@@ -81,7 +82,17 @@ class ObatController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nama_obat' => 'required',
+            'harga' => 'required|integer'
+        ], [
+            'nama_obat.required' => 'Nama Obat Harus Di Isi',
+            'harga.required' => 'Harga Obat Harus Di Isi',
+        ]);
+
+        $data = Obat::findOrFail($id);
+        $data->update($request->all());
+        return redirect()->route('obat.index');
     }
 
     /**

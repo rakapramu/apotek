@@ -23,10 +23,14 @@ Route::get('/', function () {
 
 
 Route::prefix('admin')->middleware(['auth', 'isLogin'])->group(function () {
+    // crud obat
     Route::resource('obat', ObatController::class);
+
     Route::get('/', function () {
         return view('admin.index');
     })->name('dashboard');
+
+    // crud order
     Route::resource('order', OrderController::class);
     Route::post('/save', [OrderController::class, 'save'])->name('save');
 
